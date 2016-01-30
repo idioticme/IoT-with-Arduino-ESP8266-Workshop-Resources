@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>IoT using Arduino &amp; ESP8266  by idioticme</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">IoT using Arduino &amp; ESP8266 </h1>
+      <h2 class="project-tagline">Arduino + ESP8266 Tutorials</h2>
+      <a href="https://github.com/idioticme/arduino-esp8266-tutorials" class="btn">View on GitHub</a>
+      <a href="https://github.com/idioticme/arduino-esp8266-tutorials/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/idioticme/arduino-esp8266-tutorials/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h2>
+<a id="welcome-to-learnidiotic-" class="anchor" href="#welcome-to-learnidiotic-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Learn@IDIoTIC .</h2>
+
+<p>This tutorial is about implementing IoT using Arduino &amp; ESP8266 WiFi module. After taking this tutorial you will learn about how to communicate to Arduino microcontroller over a local wifi network and then through internet.  </p>
+
+<h3>
+<a id="arduino" class="anchor" href="#arduino" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arduino</h3>
+
+<p>Arduino is an open-source prototyping platform based on easy-to-use hardware and software. Learn more about Arduino from <a href="http://arduino.cc">arduino.cc</a></p>
+
+<h3>
+<a id="esp8266" class="anchor" href="#esp8266" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ESP8266</h3>
+
+<p>The ESP8266 WiFi Module is a self contained SOC with integrated TCP/IP protocol stack that can give any microcontroller access to your WiFi network. The ESP8266 is capable of either hosting an application or offloading all Wi-Fi networking functions from another application processor. Each ESP8266 module comes pre-programmed with an AT command set firmware, meaning, you can simply hook this up to your Arduino device and get about as much WiFi-ability as a WiFi Shield offers (and that’s just out of the box)! The ESP8266 module is an extremely cost effective board with a huge, and ever growing, community.<br>
+To get started with ESP8266 refer the <a href="http://www.esp8266.com/wiki/doku.php?id=getting-started-with-the-esp8266">Getting started doc</a><br>
+The technical specifications of the ESP8266 shall be referred from the from <a href="http://www.esp8266.com/wiki/lib/exe/fetch.php?media=esp8266_specifications_english.pdf">the official specification document</a>  </p>
+
+<h3>
+<a id="communications-to-esp8266" class="anchor" href="#communications-to-esp8266" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Communications to ESP8266</h3>
+
+<p>AT commands over serial communication are used to communicate with the ESP8266. You can refer the complete command set from <a href="https://cdn.sparkfun.com/assets/learn_tutorials/4/0/3/4A-ESP8266__AT_Instruction_Set__EN_v0.30.pdf">the instruction set reference</a></p>
+
+<p>Basic AT commands we use in this tutorial are,</p>
+
+<p><strong>AT+RST</strong><br>
+Used to reset the ESP8266, clearing RAM.</p>
+
+<p><strong>ATE0</strong><br>
+Used to disable echo of last entered command.</p>
+
+<p><strong>AT+CWMODE=&lt;mode&gt;</strong><br>
+Used to enable/disable client and AP mode of ESP8266.<br>
+&lt;mode&gt; values are,<br>
+1 : station mode<br>
+2 : softAP mode<br>
+3 : softAP + station mode  </p>
+
+<p><strong>AT+CIPSERVER=&lt;mode&gt;,&lt;port&gt;</strong><br>
+Used to initialise a TCP server on ESP8266.<br>
+&lt;mode&gt; and &lt;port&gt; values are,<br>
+&lt;mode&gt; 0 Delete server<br>
+&lt;mode&gt; 1 Create server<br>
+&lt;port&gt; port number, default is 333  </p>
+
+<p><strong>AT+CIPSTART=&lt;link ID&gt;,&lt;type&gt;,&lt;remote IP&gt;,&lt;remote port&gt;</strong><br>
+Used to Establish TCP connection or UDP transmission.<br>
+&lt;link ID&gt; ID of network connection (0~4), used for multi-connection<br>
+&lt;type&gt; string, "TCP" or "UDP"<br>
+&lt;remote IP&gt; string, remote IP address<br>
+&lt;remote port&gt; string, remote port number  </p>
+
+<p><strong>AT+CIPSEND=&lt;link ID&gt;,&lt;length&gt;</strong><br>
+Used to send data
+&lt;link ID&gt; ID of the connection (0~4), for multi-connect<br>
+&lt;length&gt; data length, MAX 2048 bytes  </p>
+
+<p><strong>AT+CWJAP=&lt;ssid&gt;,&lt;pwd&gt;</strong><br>
+Used to connect to an AP<br>
+&lt;ssid&gt; string, AP’s SSID<br>
+&lt;pwd&gt; string, MAX: 64 bytes ASCII  </p>
+
+<p><strong>AT+ CIFSR</strong><br>
+Used to get local IP address  </p>
+
+<p><strong>AT+CWSAP=&lt;ssid&gt;,&lt;pwd&gt;,&lt;chl&gt;,&lt;ecn&gt;</strong><br>
+Used for the configuration of softAP mode<br>
+&lt;ssid&gt; string, ESP8266 softAP SSID<br>
+&lt;pwd&gt; string, range: 8 ~ 64 bytes ASCII<br>
+&lt;chl&gt; channel id<br>
+&lt;ecn&gt;<br>
+0   OPEN<br>
+2   WPA_PSK<br>
+3   WPA2_PSK<br>
+4   WPA_WPA2_PSK  </p>
+
+<h3>
+<a id="interfacing-esp8266-with-arduino" class="anchor" href="#interfacing-esp8266-with-arduino" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interfacing ESP8266 with Arduino</h3>
+
+<p>Refer the <a href="http://www.esp8266.com/wiki/doku.php?id=getting-started-with-the-esp8266">Getting started doc</a>  </p>
+
+<h3>
+<a id="now-refer-the-codes" class="anchor" href="#now-refer-the-codes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Now refer the codes..</h3>
+
+<h2>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h2>
+
+<p><a href="http://idiotic.me">IDIoTIC.me</a> is an open-source IoT platform that provides software as well as hardware developer platform and tools to make the world connected around you. In Learn@IDIoTIC, we share what we do and everything you need to learn about what we do. Every tutorial wikis and source codes are shared at <a href="https://github.com/idioticme" class="user-mention">@idioticme</a>.</p>
+
+<h2>
+<a id="contact-us" class="anchor" href="#contact-us" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact us</h2>
+
+<p>Wanna learn more or know more about us?? Please visit <a href="http://www.idiotic.me">IDIoTIC.me</a></p>
+
+<h2>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
+
+<p><a href="http://arduino.cc">http://arduino.cc</a><br>
+<a href="http://espressif.com/en/products/esp8266">http://espressif.com/en/products/esp8266</a><br>
+<a href="https://www.sparkfun.com/products/13678">https://www.sparkfun.com/products/13678</a>  </p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/idioticme/arduino-esp8266-tutorials">IoT using Arduino &amp; ESP8266 </a> is maintained by <a href="https://github.com/idioticme">idioticme</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-73116000-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
