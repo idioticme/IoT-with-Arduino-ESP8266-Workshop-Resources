@@ -7,7 +7,7 @@
  *The LED light can be turned OFF by send a command # followed by any characters.
  */
  
-#define LED 10                          //Pin to connect the LED
+#define LED 11                          //Pin to connect the LED
 
 char cmd;
 
@@ -19,6 +19,8 @@ void setup() {
   
   Serial.println("AT+RST");             //Reset ESP8266 to the defaults
   delay(2000);
+  Serial.println("AT+CWMODE=2");      //To enable both Client and Accesspoint mode
+  delay(200);
   Serial.println("AT+CIPMUX=1");        //Enable multiple connections;compulsory for server operations
   delay(200);
   Serial.println("AT+CIPSERVER=1,60");  //Start a TCP SERVER at port 60 on ESP8266
