@@ -1,5 +1,6 @@
 /*This program configures Access Point in the ESP8266 with the given SSID,PASSWORD,CHANNEL,ENCRYPTION_MODE, IP
- *On connecting to the AP and sending command # returns the IP & MAC of the device
+ *And the ESP8266 can be joined to a router with the given ROUTER_SSID and ROUTER_PASSWORD 
+ *On connecting to the AP and sending command # returns the IP & MAC of the device as in the AP as well as the joined router network
  */
 #define LED 11  //Pin to connect the LED.
 
@@ -16,7 +17,7 @@ void setup() {
   delay(2000);
   Serial.println("AT+CWMODE=3");      //To enable both Client and Accesspoint mode
   delay(200);
-  Serial.println("AT+CWSAP=\"SSID\",\"PWD\",6,4");        //To set accesspoint parameters SSID,PASSWORD,CHANNEL,ENCRYPTION_MODE
+  Serial.println("AT+CWSAP=\"SSID\",\"PASSWORD\",6,4");        //To set accesspoint parameters SSID,PASSWORD,CHANNEL,ENCRYPTION_MODE
   delay(500);
   Serial.println("AT+CIPAP=\"192.168.4.1\"");        //To set IP of Access point
   delay(500);
@@ -24,6 +25,8 @@ void setup() {
   delay(200);
   Serial.println("AT+CIPSERVER=1,60");//To start a SERVER at port 60 on ESP8266
   delay(200);
+  Serial.println("AT+CWJAP=\"ROUTER_SSID\",\"ROUTER_PASSWORD\""); // Connect to a router.
+  delay(1000);
 }
 
 void loop() {
