@@ -1,5 +1,6 @@
 /*
  * This program shows how to read data from the http response of a http GET request and turn ON/OFF an LED based on the data
+ * ESP8266 is joined to a router with the given ROUTER_SSID and ROUTER_PASSWORD 
  * The URL http://idiotic.me/tests/http_test.php responds with # followed by a 0 or 1 in random.
  */
 #define LED 11  //Pin to connect the LED
@@ -17,6 +18,8 @@ void setup() {
   delay(200);
   Serial.println("AT+CIPMUX=1");      //To enable multiple connections, compulsory for server operations
   delay(200);
+  Serial.println("AT+CWJAP=\"ROUTER_SSID\",\"ROUTER_PASSWORD\""); // Connect to a router.
+  delay(1000);
 }
 
 void loop() {
